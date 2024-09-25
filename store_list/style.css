@@ -1,0 +1,52 @@
+* {
+    padding: 0;
+    margin: 0;
+  }
+
+  #wrapper {
+    background-color: antiquewhite;
+    padding: 50px;
+  }
+
+  .restaurant-wrapper{
+    display: flex;
+    border: 1px solid black;
+    cursor: pointer;
+    margin-top: 10px
+  }
+
+  .image-wrapper {
+    width: 25%;
+    margin-right: 15px;
+  }
+
+  .image-wrapper img {
+    width: 100%;
+    height: auto;
+  }
+
+  .basic-info-wrapper {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .basic-info-wrapper .name {
+    margin-bottom: 20px;
+  }
+
+  .basic-info-wrapper .text-info
+  {
+    padding-right: 100px;
+  }
+
+  .stars {
+    margin-right: 15px;
+    margin-top: auto;
+    text-align: right;
+  }
+
+  .star {
+    font-size: 30px; /* Adjust size as needed */
+    color: gold; /* Change star color */
+}

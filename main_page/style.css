@@ -20,7 +20,7 @@
   width: 30vw;
   height: 200px;
   overflow-y: auto;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
   margin: auto;
   margin-bottom: 30px;
