@@ -1,0 +1,70 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.wrapper {
+  background-color: antiquewhite;
+  height: 100vh;
+}
+
+#bg-wrapper {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 50px;
+}
+
+#option-wraper {
+  display: grid;
+  width: 30vw;
+  height: 200px;
+  overflow-y: auto;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: auto;
+  margin-bottom: 30px;
+}
+
+#option-wraper::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+}
+
+#option-wraper::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Track background */
+  border-radius: 10px; /* Rounded corners for the track */
+}
+
+#option-wraper::-webkit-scrollbar-thumb {
+  background: #888; /* Scrollbar color */
+  border-radius: 10px; /* Rounded corners for the scrollbar */
+}
+
+
+#option-wraper::-webkit-scrollbar-thumb:hover {
+  background: #555;
+  border-radius: 10px; /* Color when hovering over scrollbar */
+}
+
+.option {
+  width: 90px;
+  height: 45px;
+  border-radius: 20%;
+  cursor: pointer;
+}
+.active {
+  background-color: aquamarine;
+  color: blueviolet;
+}
+
+#submit-button-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+#submit {
+  width: 75px;
+  height: 50px;
+  border-radius: 20%;
+  cursor: pointer;
+}
