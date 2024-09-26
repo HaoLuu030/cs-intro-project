@@ -26,6 +26,8 @@
   margin-bottom: 30px;
 }
 
+/* =================scroll bar style======================== */
+
 #option-wraper::-webkit-scrollbar {
   width: 12px; /* Width of the scrollbar */
 }
@@ -45,6 +47,8 @@
   background: #555;
   border-radius: 10px; /* Color when hovering over scrollbar */
 }
+
+/* ================================ */
 
 .option {
   width: 90px;
