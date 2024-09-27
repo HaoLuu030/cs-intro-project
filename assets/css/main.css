@@ -28,22 +28,22 @@
 
 /* =================scroll bar style======================== */
 
-#option-wraper::-webkit-scrollbar {
+#option-wrapper::-webkit-scrollbar {
   width: 12px; /* Width of the scrollbar */
 }
 
-#option-wraper::-webkit-scrollbar-track {
+#option-wrapper::-webkit-scrollbar-track {
   background: #f1f1f1; /* Track background */
   border-radius: 10px; /* Rounded corners for the track */
 }
 
-#option-wraper::-webkit-scrollbar-thumb {
+#option-wrapper::-webkit-scrollbar-thumb {
   background: #888; /* Scrollbar color */
   border-radius: 10px; /* Rounded corners for the scrollbar */
 }
 
 
-#option-wraper::-webkit-scrollbar-thumb:hover {
+#option-wrapper::-webkit-scrollbar-thumb:hover {
   background: #555;
   border-radius: 10px; /* Color when hovering over scrollbar */
 }
