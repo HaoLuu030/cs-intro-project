@@ -5,25 +5,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/css/add-store.css">
-    <title>Document</title>
+    <title>Dream Restaurants</title>
 </head>
 
 <body>
-
-    <h1>Cloud Cafe</h1>
+    <h1>Dream Restaurants</h1>
 
     <div class="content">
+        <form id="add-restaurant-form">
 
-        <form id="add-cafe-form"></form>
+            <input type="text" id="Restaurant_Name" placeholder="Restaurant Name" required>
+            <input type="text" id="Address" placeholder="Address" required>
+            <input type="string" id="Phone_Number" placeholder="Phone Number" required>
+            <input type="text" id="Email" placeholder="Email" required>
+            <input type="text" id="Opening_Hours" placeholder="Opening Hours" required>
+            <input type="text" id="Cuisine_Type" placeholder="Cuisine Type" required>
+            <input type="text" id="Dietary_Options" placeholder="Dietary Options" required>
+            <input type="text" id="Service_Type" placeholder="Service Type" required>
+            <input type="text" id="Comments" placeholder="Comments" required>
 
-        <ul id="cafe-list"></ul>
+            <button type="submit">Add Restaurant</button>
+        </form>
 
+        <ul id="restaurant-list"></ul>
     </div>
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-analytics.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -51,6 +61,80 @@
                 console.log(doc.id, " => ", doc.data());
             });
         });
+        const Name = document.querySelector('#restaurant-list');
+        const form = document.querySelector('#add-restaurant-form');
+
+        function renderStorePage(doc){
+            let li = document.createElement('li');
+            let Restaurant_Name = document.createElement('span');
+            let Address = document.createElement('span');
+            let Phone_Number = document.createElement('span');
+            let Email = document.createElement('span');
+            let Opening_Hours = document.createElement('span');
+            let Cuisine_Type = document.createElement('span');
+            let Dietary_Options = document.createElement('span');
+            let Service_Type = document.createElement('span');
+            let Comments = document.createElement('span');
+            li.setAttribute('data-id', doc.id);
+            Restaurant_Name.textContent = doc.data().Restaurant_Name;
+            Address.textContent = doc.data().Address;
+            Phone_Number.textContent = doc.data().Phone_Number;
+            Email.textContent = doc.data().Email;
+            Opening_Hours.textContent = doc.data().Opening_Hours;
+            Cuisine_Type.textContent = doc.data().Cuisine_Type;
+            Dietary_Options.textContent = doc.data().Dietary_Options;
+            Service_Type.textContent = doc.data().Service_Type;
+            Comments.textContent = doc.data().Comments;
+            li.appendChild(Restaurant_Name);
+            li.appendChild(Address);
+            li.appendChild(Phone_Number);
+            li.appendChild(Email);
+            li.appendChild(Opening_Hours);
+            li.appendChild(Cuisine_Type);
+            li.appendChild(Dietary_Options);
+            li.appendChild(Service_Type);   
+            li.appendChild(Comments);
+            Name.appendChild(li);
+        }
+        console.log(window.db);
+        getDocs(foodCollection).then((querySnapshot) => {
+            querySnapshot.forEach((doc)=>{
+                console.log(doc.data());
+            });
+        });
+        form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    try {
+        await addDoc(foodCollection, {
+            RestaurantName: form.Restaurant_Name.value,
+            Address: form.Address.value,
+            Phone_Number: form.Phone_Number.value,
+            Email: form.Email.value,
+            Opening_Hours: form.Opening_Hours.value,
+            Cuisine_Type: form.Cuisine_Type.value,
+            Dietary_Options: form.Dietary_Options.value,
+            Service_Type: form.Service_Type.value,
+            Comments: form.Comments.value
+        });
+
+        // Clear the form fields after successful submission
+        form.Restaurant_Name.value = '';
+        form.Address.value = '';
+        form.Phone_Number.value = '';
+        form.Email.value = '';
+        form.Opening_Hours.value = '';
+        form.Cuisine_Type.value = '';
+        form.Dietary_Options.value = '';
+        form.Service_Type.value = '';
+        form.Comments.value = '';
+        
+        console.log("Document added successfully");
+    } catch (error) {
+        console.error("Error adding document: ", error);
+    }
+});
+
     </script>
 </body>
 
