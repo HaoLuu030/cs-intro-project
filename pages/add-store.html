@@ -16,7 +16,7 @@
 
             <input type="text" id="Restaurant_Name" placeholder="Restaurant Name" required>
             <input type="text" id="Address" placeholder="Address" required>
-            <input type="string" id="Phone_Number" placeholder="Phone Number" required>
+            <input type="text" id="Phone_Number" placeholder="Phone Number" required>
             <input type="text" id="Email" placeholder="Email" required>
             <input type="text" id="Opening_Hours" placeholder="Opening Hours" required>
             <input type="text" id="Cuisine_Type" placeholder="Cuisine Type" required>
@@ -29,11 +29,12 @@
 
         <ul id="restaurant-list"></ul>
     </div>
+
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-analytics.js";
-        import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -53,18 +54,12 @@
 
         // Initialize Firestore
         const db = getFirestore(app);
+        const foodCollection = collection(db, 'Food');
 
-        // Example: Getting data from a Firestore collection
-        const foodCollection = collection(db, 'Food'); // Specify the collection name
-        getDocs(foodCollection).then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                console.log(doc.id, " => ", doc.data());
-            });
-        });
-        const Name = document.querySelector('#restaurant-list');
+        const restaurantList = document.querySelector('#restaurant-list');
         const form = document.querySelector('#add-restaurant-form');
 
-        function renderStorePage(doc){
+        function renderStorePage(doc) {
             let li = document.createElement('li');
             let Restaurant_Name = document.createElement('span');
             let Address = document.createElement('span');
@@ -75,6 +70,8 @@
             let Dietary_Options = document.createElement('span');
             let Service_Type = document.createElement('span');
             let Comments = document.createElement('span');
+            let cross = document.createElement('div');
+
             li.setAttribute('data-id', doc.id);
             Restaurant_Name.textContent = doc.data().Restaurant_Name;
             Address.textContent = doc.data().Address;
@@ -85,6 +82,9 @@
             Dietary_Options.textContent = doc.data().Dietary_Options;
             Service_Type.textContent = doc.data().Service_Type;
             Comments.textContent = doc.data().Comments;
+            cross.textContent = 'x';
+            cross.style.cursor = 'pointer'; // Thêm con trỏ chuột cho dấu x
+
             li.appendChild(Restaurant_Name);
             li.appendChild(Address);
             li.appendChild(Phone_Number);
@@ -92,49 +92,73 @@
             li.appendChild(Opening_Hours);
             li.appendChild(Cuisine_Type);
             li.appendChild(Dietary_Options);
-            li.appendChild(Service_Type);   
+            li.appendChild(Service_Type);
             li.appendChild(Comments);
-            Name.appendChild(li);
+            li.appendChild(cross);
+
+            restaurantList.appendChild(li);
+
+            // Handle delete
+            cross.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                let id = e.target.parentElement.getAttribute('data-id'); // Lấy ID từ thuộc tính data-id
+                if (id) {
+                    try {
+                        // Sử dụng doc() để tạo tham chiếu đến tài liệu
+                        const docRef = doc(db, 'Food', id);
+                        await deleteDoc(docRef); // Xóa tài liệu
+                        console.log('Document successfully deleted'); // In thông báo thành công
+                    } catch (error) {
+                        console.error('Error removing document: ', error); // In lỗi nếu có
+                    }
+                } else {
+                    console.log('No document id found'); // In thông báo nếu không tìm thấy ID
+                }
+            });
         }
-        console.log(window.db);
-        getDocs(foodCollection).then((querySnapshot) => {
-            querySnapshot.forEach((doc)=>{
-                console.log(doc.data());
+
+        // Real-time listener using onSnapshot
+        onSnapshot(foodCollection, (snapshot) => {
+            // Làm mới danh sách nhà hàng mỗi khi có thay đổi
+            restaurantList.innerHTML = ''; // Xóa nội dung cũ
+            snapshot.forEach(doc => {
+                renderStorePage(doc);
             });
         });
+
+        // Add new restaurant
         form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+            e.preventDefault();
 
-    try {
-        await addDoc(foodCollection, {
-            RestaurantName: form.Restaurant_Name.value,
-            Address: form.Address.value,
-            Phone_Number: form.Phone_Number.value,
-            Email: form.Email.value,
-            Opening_Hours: form.Opening_Hours.value,
-            Cuisine_Type: form.Cuisine_Type.value,
-            Dietary_Options: form.Dietary_Options.value,
-            Service_Type: form.Service_Type.value,
-            Comments: form.Comments.value
+            try {
+                await addDoc(foodCollection, {
+                    Restaurant_Name: form.Restaurant_Name.value,
+                    Address: form.Address.value,
+                    Phone_Number: form.Phone_Number.value,
+                    Email: form.Email.value,
+                    Opening_Hours: form.Opening_Hours.value,
+                    Cuisine_Type: form.Cuisine_Type.value,
+                    Dietary_Options: form.Dietary_Options.value,
+                    Service_Type: form.Service_Type.value,
+                    Comments: form.Comments.value
+                });
+
+                // Clear the form fields after successful submission
+                form.Restaurant_Name.value = '';
+                form.Address.value = '';
+                form.Phone_Number.value = '';
+                form.Email.value = '';
+                form.Opening_Hours.value = '';
+                form.Cuisine_Type.value = '';
+                form.Dietary_Options.value = '';
+                form.Service_Type.value = '';
+                form.Comments.value = '';
+
+                console.log("Document added successfully");
+            } catch (error) {
+                console.error("Error adding document: ", error);
+            }
         });
-
-        // Clear the form fields after successful submission
-        form.Restaurant_Name.value = '';
-        form.Address.value = '';
-        form.Phone_Number.value = '';
-        form.Email.value = '';
-        form.Opening_Hours.value = '';
-        form.Cuisine_Type.value = '';
-        form.Dietary_Options.value = '';
-        form.Service_Type.value = '';
-        form.Comments.value = '';
-        
-        console.log("Document added successfully");
-    } catch (error) {
-        console.error("Error adding document: ", error);
-    }
-});
-
     </script>
 </body>
 
