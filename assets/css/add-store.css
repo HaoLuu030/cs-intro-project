@@ -4,8 +4,9 @@ body {
   background-size: cover; /* Scale the background to cover the entire area */
   background-position: center; /* Center the background */
   background-repeat: no-repeat; /* Prevent the background from repeating */
-  height: 100vh; /* Set the height to cover the full viewport */
+  height: auto; /* Set the height to cover the full viewport */
   margin: 0; /* Remove default margin */
+  overflow: auto;
 }
 
 /* Example of using the background image for a div */
@@ -124,14 +125,20 @@ button {
 /* Restaurant list */
 
 table {
-  border-collapse: collapse;
   width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Fixes the layout of the table */
 }
 th,
 td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
+  border: 1px solid #ddd; /* Border for cells */
+  padding: 10px; /* Inner padding */
+  text-align: left; /* Align text to the left */
+  max-width: 150px; /* Set a maximum width for cells */
+  overflow: hidden; /* Hide overflow content */
+  white-space: normal; /* Allow text to wrap */
+  word-wrap: break-word; /* Break long words */
+  /* You can also use: overflow-wrap: break-word; */
 }
 th {
   background-color: #f2f2f2;
