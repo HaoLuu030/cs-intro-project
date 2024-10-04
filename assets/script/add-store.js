@@ -111,7 +111,7 @@ form.addEventListener("submit", async (e) => {
       Email: form.Email.value,
       Opening_Hours: form.Opening_Hours.value,
       Cuisine_Type: form.Cuisine_Type.value,
-      Dietary_Options: form.Dietary_Options.value,
+      Dietary_Options: dietaryOptionArray,
       Service_Type: form.Service_Type.value,
       Comments: form.Comments.value,
     });
