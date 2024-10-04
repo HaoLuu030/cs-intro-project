@@ -15,15 +15,17 @@ async function fetchAllDocuments() {
   try {
     // fetch data from the database
     const querySnapshot = await getDocs(foodCollection);
+
     // Use a Set to store unique dietary options directly
     const uniqueOptions = new Set();
-
+    // fill unique options with options from database
     querySnapshot.forEach((doc) => {
       const dietaryOptions = doc.data().Dietary_Options || []; // fall back to empty array if undefined
       dietaryOptions.forEach((option) => {
         uniqueOptions.add(option);
       });
     });
+    // create a button based on options in unique options
     uniqueOptions.forEach((option) => {
       // create a new button
       const newElement = document.createElement("button");
