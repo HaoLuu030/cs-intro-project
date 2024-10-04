@@ -16,7 +16,7 @@ const form = document.querySelector("#add-restaurant-form");
 function renderRestaurant(doc) {
   const row = document.createElement("tr");
   row.setAttribute("data-id", doc.id);
-
+  // create an element for each cell
   const nameCell = document.createElement("td");
   const addressCell = document.createElement("td");
   const commentsCell = document.createElement("td");
