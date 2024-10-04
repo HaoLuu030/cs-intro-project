@@ -3,6 +3,7 @@
 // create a number of options
 // get the id of the body
 const container = document.getElementById("option-wrapper");
+// TODO: create a function to render buttons based on keywords in the database
 for (let i = 0; i < 15; i++) {
   // create a new button
   const newElement = document.createElement("button");

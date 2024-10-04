@@ -89,10 +89,20 @@ onSnapshot(foodCollection, (snapshot) => {
   });
 });
 
-// Add new restaurant
+// Add new restaurant to the database
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
+  // process dietary option input
 
+  // trim whitespace at the beginning and the end of the input
+  const dietaryOptionInput = form.Dietary_Options.value.trim();
+  const dietaryOptionArray = dietaryOptionInput
+    // split input based on comma (return an array)
+    .split(",")
+    // return an array with modified elements
+    .map((value) => value.trim())
+    // remove falsy values (NaN, 0, white space)
+    .filter((value) => value);
   try {
     await addDoc(foodCollection, {
       Restaurant_Name: form.Restaurant_Name.value,
@@ -101,7 +111,7 @@ form.addEventListener("submit", async (e) => {
       Email: form.Email.value,
       Opening_Hours: form.Opening_Hours.value,
       Cuisine_Type: form.Cuisine_Type.value,
-      Dietary_Options: form.Dietary_Options.value,
+      Dietary_Options: dietaryOptionArray,
       Service_Type: form.Service_Type.value,
       Comments: form.Comments.value,
     });
