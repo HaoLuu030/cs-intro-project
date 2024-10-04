@@ -1,20 +1,12 @@
-// Import Firebase functions
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import {
-  getFirestore,
+  db,
   collection,
   addDoc,
   deleteDoc,
-  doc as getDocument,
   onSnapshot,
-} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+  getDocument,
+} from "../script/firebase-service.js";
 
-// Firebase configuration
-import firebaseConfig from "../config/firebase-config.js";
-
-// Initialize Firebase and Firestore
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 const foodCollection = collection(db, "Food");
 
 const restaurantList = document.querySelector("#restaurant_list");
