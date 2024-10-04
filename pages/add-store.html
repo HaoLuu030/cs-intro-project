@@ -160,7 +160,7 @@
         // append cells to each row
 
         // Handle delete
-        cross_cell.addEventListener("click", async (e) => {
+        cross.addEventListener("click", async (e) => {
           e.stopPropagation();
           let id = e.target.parentElement.getAttribute("data-id"); // Lấy ID từ thuộc tính data-id
           if (id) {
