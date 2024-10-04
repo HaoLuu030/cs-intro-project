@@ -92,6 +92,16 @@ onSnapshot(foodCollection, (snapshot) => {
 // Add new restaurant
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
+  // process dietary option input
+  // trim whitespace at the beginning and the end of the input
+  const dietaryOptionInput = form.Dietary_Options.value.trim();
+  const dietaryOptionArray = dietaryOptionInput
+    // split input based on comma (return an array)
+    .split(",")
+    // return an array with modified elements
+    .map((value) => value.trim())
+    // remove falsy values (NaN, 0, white space)
+    .filter((value) => value);
 
   try {
     await addDoc(foodCollection, {
