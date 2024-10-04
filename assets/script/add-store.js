@@ -1,66 +1,123 @@
+// Import Firebase functions
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  deleteDoc,
+  doc as getDocument,
+  onSnapshot,
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
-const Name = document.querySelector('#restaurant-list');
-const form = document.querySelector('#add-restaurant-form');
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyC30Yz7Zct6gpTgFHCbVPDYVI2cTglkPmI",
+  authDomain: "food-4206b.firebaseapp.com",
+  projectId: "food-4206b",
+  storageBucket: "food-4206b.appspot.com",
+  messagingSenderId: "1056463919710",
+  appId: "1:1056463919710:web:d453c55df200e115d972cf",
+  measurementId: "G-PDP3EZH9T8",
+};
 
-function renderStorePage(doc){
-    let li = document.createElement('li');
-    let Restaurant_Name = document.createElement('span');
-    let Address = document.createElement('span');
-    let Phone_Number = document.createElement('span');
-    let Email = document.createElement('span');
-    let Opening_Hours = document.createElement('span');
-    let Cuisine_Type = document.createElement('span');
-    let Dietary_Options = document.createElement('span');
-    let Service_Type = document.createElement('span');
-    let Comments = document.createElement('span');
-    li.setAttribute('data-id', doc.id);
-    Restaurant_Name.textContent = doc.data().Restaurant_Name;
-    Address.textContent = doc.data().Address;
-    Phone_Number.textContent = doc.data().Phone_Number;
-    Email.textContent = doc.data().Email;
-    Opening_Hours.textContent = doc.data().Opening_Hours;
-    Cuisine_Type.textContent = doc.data().Cuisine_Type;
-    Dietary_Options.textContent = doc.data().Dietary_Options;
-    Service_Type.textContent = doc.data().Service_Type;
-    Comments.textContent = doc.data().Comments;
-    li.appendChild(Restaurant_Name);
-    li.appendChild(Address);
-    li.appendChild(Phone_Number);
-    li.appendChild(Email);
-    li.appendChild(Opening_Hours);
-    li.appendChild(Cuisine_Type);
-    li.appendChild(Dietary_Options);
-    li.appendChild(Service_Type);   
-    li.appendChild(Comments);
-    Name.appendChild(li);
+// Initialize Firebase and Firestore
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const foodCollection = collection(db, "Food");
+
+const restaurantList = document.querySelector("#restaurant_list");
+const form = document.querySelector("#add-restaurant-form");
+
+// Render a restaurant in the table
+function renderRestaurant(doc) {
+  const row = document.createElement("tr");
+  row.setAttribute("data-id", doc.id);
+
+  const nameCell = document.createElement("td");
+  const addressCell = document.createElement("td");
+  const commentsCell = document.createElement("td");
+  const cuisineTypeCell = document.createElement("td");
+  const dietaryOptionsCell = document.createElement("td");
+  const emailCell = document.createElement("td");
+  const openingHoursCell = document.createElement("td");
+  const phoneNumberCell = document.createElement("td");
+  const serviceTypeCell = document.createElement("td");
+  const deleteCell = document.createElement("td");
+
+  // Set content for the cells
+  nameCell.textContent = doc.data().Restaurant_Name;
+  addressCell.textContent = doc.data().Address;
+  commentsCell.textContent = doc.data().Comments;
+  cuisineTypeCell.textContent = doc.data().Cuisine_Type;
+  dietaryOptionsCell.textContent = doc.data().Dietary_Options;
+  emailCell.textContent = doc.data().Email;
+  openingHoursCell.textContent = doc.data().Opening_Hours;
+  phoneNumberCell.textContent = doc.data().Phone_Number;
+  serviceTypeCell.textContent = doc.data().Service_Type;
+
+  // Create delete button
+  const deleteButton = document.createElement("button");
+  deleteButton.textContent = "Delete";
+  deleteCell.appendChild(deleteButton);
+
+  // Append all cells to the row
+  row.appendChild(nameCell);
+  row.appendChild(addressCell);
+  row.appendChild(commentsCell);
+  row.appendChild(cuisineTypeCell);
+  row.appendChild(dietaryOptionsCell);
+  row.appendChild(emailCell);
+  row.appendChild(openingHoursCell);
+  row.appendChild(phoneNumberCell);
+  row.appendChild(serviceTypeCell);
+  row.appendChild(deleteCell);
+
+  // Append the row to the restaurant list
+  restaurantList.appendChild(row);
+
+  // Handle delete functionality
+  deleteButton.addEventListener("click", async () => {
+    const id = row.getAttribute("data-id");
+    try {
+      const docRef = getDocument(db, "Food", id); // Reference to the specific document
+      await deleteDoc(docRef); // Delete the document from Firestore
+      row.remove(); // Remove row from the table
+      console.log("Restaurant deleted successfully");
+    } catch (error) {
+      console.error("Error deleting document:", error);
+    }
+  });
 }
-console.log(window.db);
-window.db.collection('Food').get().then((querySnapshot) => {
-	querySnapshot.forEach((doc)=>{
-		console.log(doc.data());
-	});
-});
-form.addEventListener('submit', (e) =>{
-    e.preventDefault();
-    window.db.collection('Food').add({
-        RestaurantName: form.Restaurant_Name.value,
-        Address: form.Address.value,
-        Phone_Number: form.Phone_Number.value,
-        Email: form.Email.value,
-        Opening_Hours: form.Opening_Hours.value,
-        Cuisine_Type: form.Cuisine_Type.value,
-        Dietary_Options: form.Dietary_options.value,
-        Service_Type: form.Service_Type.value,
-        Comments: form.Comments.value
-    })
-    form.Restaurant_Name.value = '';
-    form.Address.value = '';
-    form.Phone_Number.value = '';
-    form.Email.value = '';
-    form.Opening_Hours.value = '';
-    form.Cuisine_Type.value = '';
-    form.Dietary_Options.value = '';
-    form.Service_Type.value = '';
-    form.Comments.value = '';
-})
 
+// Real-time listener to fetch and render restaurants
+onSnapshot(foodCollection, (snapshot) => {
+  restaurantList.innerHTML = ""; // Clear the list before rendering
+  snapshot.forEach((doc) => {
+    renderRestaurant(doc); // Render each restaurant document
+  });
+});
+
+// Add new restaurant
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  try {
+    await addDoc(foodCollection, {
+      Restaurant_Name: form.Restaurant_Name.value,
+      Address: form.Address.value,
+      Phone_Number: form.Phone_Number.value,
+      Email: form.Email.value,
+      Opening_Hours: form.Opening_Hours.value,
+      Cuisine_Type: form.Cuisine_Type.value,
+      Dietary_Options: form.Dietary_Options.value,
+      Service_Type: form.Service_Type.value,
+      Comments: form.Comments.value,
+    });
+
+    // Clear the form fields
+    form.reset();
+    console.log("Restaurant added successfully");
+  } catch (error) {
+    console.error("Error adding restaurant:", error);
+  }
+});

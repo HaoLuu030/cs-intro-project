@@ -56,7 +56,7 @@
       </form>
 
       <div>
-        <h2>Resaurant List</h2>
+        <h2>Restaurant List</h2>
         <table border="1" cellspacing="0" cellpadding="8">
           <thead>
             <tr>
@@ -77,149 +77,7 @@
       </div>
     </div>
 
-    <script type="module">
-      // Import the functions you need from the SDKs you need
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-analytics.js";
-      import {
-        getFirestore,
-        collection,
-        addDoc,
-        deleteDoc,
-        doc,
-        onSnapshot,
-      } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
-
-      // Your web app's Firebase configuration
-      const firebaseConfig = {
-        apiKey: "AIzaSyC30Yz7Zct6gpTgFHCbVPDYVI2cTglkPmI",
-        authDomain: "food-4206b.firebaseapp.com",
-        databaseURL: "https://food-4206b-default-rtdb.firebaseio.com",
-        projectId: "food-4206b",
-        storageBucket: "food-4206b.appspot.com",
-        messagingSenderId: "1056463919710",
-        appId: "1:1056463919710:web:d453c55df200e115d972cf",
-        measurementId: "G-PDP3EZH9T8",
-      };
-
-      // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
-      const analytics = getAnalytics(app);
-
-      // Initialize Firestore
-      const db = getFirestore(app);
-      const foodCollection = collection(db, "Food");
-
-      const restaurantList = document.querySelector("#restaurant_list");
-      const form = document.querySelector("#add-restaurant-form");
-      // handle render store page
-      function renderStorePage(doc) {
-        console.log(doc.data());
-        // create HTML elements
-        // create a row
-        const row = document.createElement("tr");
-        // create cells for a row
-        const name_cell = document.createElement("td");
-        const address_cell = document.createElement("td");
-        const phone_number_cell = document.createElement("td");
-        const email_cell = document.createElement("td");
-        const opening_hour_cell = document.createElement("td");
-        const cuisine_type_cell = document.createElement("td");
-        const dietary_option_cell = document.createElement("td");
-        const service_type_cell = document.createElement("td");
-        const comments_cell = document.createElement("td");
-        const cross_cell = document.createElement("td");
-
-        // set data
-        row.setAttribute("data-id", doc.id);
-        name_cell.textContent = doc.data().Restaurant_Name;
-        address_cell.textContent = doc.data().Address;
-        phone_number_cell.textContent = doc.data().Phone_Number;
-        email_cell.textContent = doc.data().Email;
-        opening_hour_cell.textContent = doc.data().Opening_Hours;
-        cuisine_type_cell.textContent = doc.data().Cuisine_Type;
-        dietary_option_cell.textContent = doc.data().Dietary_Options;
-        service_type_cell.textContent = doc.data().Service_Type;
-        comments_cell.textContent = doc.data().Comments;
-        cross_cell.textContent = "x";
-        // add html elements
-        row.appendChild(name_cell);
-        row.appendChild(address_cell);
-        row.appendChild(comments_cell);
-        row.appendChild(cuisine_type_cell);
-        row.appendChild(dietary_option_cell);
-        row.appendChild(email_cell);
-        row.appendChild(opening_hour_cell);
-        row.appendChild(phone_number_cell);
-        row.appendChild(service_type_cell);
-        row.appendChild(cross_cell);
-
-        restaurantList.appendChild(row);
-
-        cross_cell.style.cursor = "pointer"; // Thêm con trỏ chuột cho dấu x
-        // append cells to each row
-
-        // Handle delete
-        cross.addEventListener("click", async (e) => {
-          e.stopPropagation();
-          let id = e.target.parentElement.getAttribute("data-id"); // Lấy ID từ thuộc tính data-id
-          if (id) {
-            try {
-              // Sử dụng doc() để tạo tham chiếu đến tài liệu
-              const docRef = doc(db, "Food", id);
-              await deleteDoc(docRef); // Xóa tài liệu
-              console.log("Document successfully deleted"); // In thông báo thành công
-            } catch (error) {
-              console.error("Error removing document: ", error); // In lỗi nếu có
-            }
-          } else {
-            console.log("No document id found"); // In thông báo nếu không tìm thấy ID
-          }
-        });
-      }
-
-      // Real-time listener using onSnapshot
-      onSnapshot(foodCollection, (snapshot) => {
-        // Làm mới danh sách nhà hàng mỗi khi có thay đổi
-        restaurantList.innerHTML = ""; // Xóa nội dung cũ
-        snapshot.forEach((doc) => {
-          renderStorePage(doc);
-        });
-      });
-
-      // Add new restaurant
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        try {
-          await addDoc(foodCollection, {
-            Restaurant_Name: form.Restaurant_Name.value,
-            Address: form.Address.value,
-            Phone_Number: form.Phone_Number.value,
-            Email: form.Email.value,
-            Opening_Hours: form.Opening_Hours.value,
-            Cuisine_Type: form.Cuisine_Type.value,
-            Dietary_Options: form.Dietary_Options.value,
-            Service_Type: form.Service_Type.value,
-            Comments: form.Comments.value,
-          });
-
-          // Clear the form fields after successful submission
-          form.Restaurant_Name.value = "";
-          form.Address.value = "";
-          form.Phone_Number.value = "";
-          form.Email.value = "";
-          form.Opening_Hours.value = "";
-          form.Cuisine_Type.value = "";
-          form.Dietary_Options.value = "";
-          form.Service_Type.value = "";
-          form.Comments.value = "";
-
-          console.log("Document added successfully");
-        } catch (error) {
-          console.error("Error adding document: ", error);
-        }
-      });
+    <script src="../assets/script/add-store.js" type="module">
     </script>
   </body>
 </html>
